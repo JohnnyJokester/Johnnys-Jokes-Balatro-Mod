@@ -112,7 +112,7 @@ SMODS.Joker{
     atlas = "johnnyspack_a",
 
     calculate = function(self, card, context)
-        if card.ability.set == "Joker" and not card.debuff and not context.blueprint then
+        if card.ability.set == "Joker" and not card.debuff then
             if context.individual and context.cardarea == G.play then
                 if context.other_card:get_id() == 14 then
                     context.other_card.ability.perma_mult = (context.other_card.ability.perma_mult or 0) +
@@ -155,7 +155,7 @@ SMODS.Joker{
     atlas = "johnnyspack_pioneer_plaque",
 
     calculate = function(self, card, context)
-        if card.ability.set == "Joker" and not card.debuff and not context.blueprint then
+        if card.ability.set == "Joker" and not card.debuff then
             if context.using_consumeable then
                 if context.consumeable.ability.set == 'Planet' and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                     if pseudorandom('pioneer'..G.GAME.round_resets.ante) < G.GAME.probabilities.normal/card.ability.extra.odds then
@@ -210,10 +210,12 @@ SMODS.Joker{
 
     calculate = function(self, card, context)
         if context.selling_card and not context.blueprint then
-            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_step
-            return {
-                message = localize('k_upgrade_ex')
-            }
+            if not context.card == card then
+                card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_step
+                return {
+                    message = localize('k_upgrade_ex')
+                }
+            end
         end
         if context.joker_main and context.cardarea == G.jokers then
             return {
@@ -411,13 +413,13 @@ SMODS.Joker{
     end,
 
     calculate = function(self, card, context)
-        if card.ability.set == "Joker" and not card.debuff and not context.blueprint then
-            if context.setting_blind and not card.getting_sliced then
+        if card.ability.set == "Joker" and not card.debuff then
+            if context.setting_blind and not card.getting_sliced and not context.blueprint then
                 if card.ability.extra.odds == 5 then
                     card.ability.extra.odds = 6
                 else
                     local funny = pseudorandom("bullet_kin")
-                    if funny < 0.1 then
+                    if funny < 0.05 then
                         card.ability.extra.odds = 5
                     end
                 end
@@ -435,7 +437,7 @@ SMODS.Joker{
                 end
             end
 
-            if context.cards_destroyed then
+            if context.cards_destroyed and not context.blueprint  then
                 if card.ability.extra.cards > 0 then
                     card.ability.extra.cards = 0
                     if pseudorandom("bullet_kin") < 0.5 then
@@ -452,7 +454,7 @@ SMODS.Joker{
                 end
             end
 
-            if context.remove_playing_cards then
+            if context.remove_playing_cards and not context.blueprint then
                 if card.ability.extra.cards > 0 then
                     card.ability.extra.cards = 0
                     if pseudorandom("bullet_kin") < 0.5 then
@@ -541,7 +543,7 @@ SMODS.Joker{
     pos = { x = 0, y = 0 },
     rarity = 3,
     cost = 8,
-    blueprint_compat=false,
+    blueprint_compat=true,
     eternal_compat=true,
     unlocked=true,
     discovered=true,
@@ -969,7 +971,7 @@ SMODS.Joker {
     pos = { x = 0, y = 0 },
     rarity = 2,
     cost = 6,
-    blueprint_compat=true,
+    blueprint_compat=false,
     eternal_compat=true,
     unlocked=true,
     discovered=true,
@@ -1084,7 +1086,7 @@ SMODS.Joker{
     pos = { x = 0, y = 0 },
     rarity = 2,
     cost = 6,
-    blueprint_compat=true,
+    blueprint_compat=false,
     eternal_compat=true,
     unlocked=true,
     discovered=true,
@@ -1374,8 +1376,7 @@ SMODS.Joker{
         if card.ability.set == "Joker" and not card.debuff and context.cardarea == G.play then
             if context.individual and context.other_card:get_id() == 7 then
                 return {
-                    chips = card.ability.extra.total_chips_bonus,
-                    card = context.other_card
+                    chips = card.ability.extra.total_chips_bonus
                 }
             end
         end
@@ -1471,7 +1472,7 @@ SMODS.Atlas{
 }
 SMODS.Joker{
     key = "johnnyspack_residence",
-    config = { extra = {x_mult = 3.5} },
+    config = { extra = {x_mult = 4} },
     pos = { x = 0, y = 0 },
     rarity = 3,
     cost = 8,
@@ -1538,14 +1539,19 @@ SMODS.Joker{
                         it = it + 1
                         selected_tag = pseudorandom_element(tag_pool, 'retrojoker'..it)
                     end
-                    G.E_MANAGER:add_event(Event({
-                        func = (function()
-                            add_tag(Tag(selected_tag, false, 'Small'))
-                            play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
-                            play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
-                            return true
-                        end)
-                    }))
+                    return {
+                        message = "Tag!",
+                        func = function() -- This is for timing purposes, it runs after the message
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    add_tag(Tag(selected_tag, false, 'Small'))
+                                    play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+                                    play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+                                    return true
+                                end
+                            }))
+                        end
+                    }
                 end
             end
         end
@@ -1605,7 +1611,7 @@ SMODS.Joker{
                 playing_card_joker_effects({true})
             end
 
-            if context.remove_playing_cards then
+            if context.remove_playing_cards and not context.blueprint then
                 for k, v in pairs(context.removed) do
                     if SMODS.has_enhancement(v, "m_johnnyspack_bomb_enhancement") then
                         if G.GAME.dollars ~= 0 then
@@ -1615,7 +1621,7 @@ SMODS.Joker{
                 end
             end
 
-            if context.after then 
+            if context.after and not context.blueprint then 
                 if card.ability.extra.reset then
                     card.ability.extra.reset = false
                     if G.GAME.dollars ~= 0 then
@@ -1642,7 +1648,7 @@ SMODS.Joker{
     pos = { x = 0, y = 0 },
     rarity = 2,
     cost = 7,
-    blueprint_compat=true,
+    blueprint_compat=false,
     eternal_compat=true,
     unlocked=true,
     discovered=true,
@@ -1992,7 +1998,7 @@ SMODS.Joker{
 
     calculate = function(self, card, context)
         if card.ability.set == "Joker" and not card.debuff then
-            if context.before then
+            if context.before and not context.blueprint then
                 card.ability.extra.letters = 0
                 --[[
                 local ace = false
@@ -2097,7 +2103,7 @@ SMODS.Joker{
     pos = { x = 0, y = 0 },
     rarity = 3,
     cost = 9,
-    blueprint_compat=false,
+    blueprint_compat=true,
     eternal_compat=true,
     unlocked=true,
     discovered=true,
@@ -2105,23 +2111,32 @@ SMODS.Joker{
     pos = { x = 0, y = 0 },
 
     calculate = function(self, card, context)
-        if card.ability.set == "Joker" and not card.debuff and not context.blueprint and context.cardarea == G.play then
+        if card.ability.set == "Joker" and not card.debuff and context.cardarea == G.play then
             if context.individual and not context.other_card.debuff then 
                 if context.other_card:get_id() == 6 then
-                    card.ability.extra.xmult = card.ability.extra.max_xmult
-                    card.ability.extra.clicked = false
-                    return {
-                        message = "Reloaded!",
-                        card = card
-                    }
-                else
-                    if card.ability.extra.xmult > 1.1 then
-                        card.ability.extra.xmult = card.ability.extra.xmult - card.ability.extra.xmult_step
+                    if not context.blueprint then
+                        card.ability.extra.xmult = card.ability.extra.max_xmult
+                        card.ability.extra.clicked = false
                         return {
-                            xmult = card.ability.extra.xmult,
+                            message = "Reloaded!",
                             card = card
                         }
-                    elseif not card.ability.extra.clicked then
+                    end
+                else
+                    if card.ability.extra.xmult > 1.1 then
+                        if not context.blueprint then
+                            card.ability.extra.xmult = card.ability.extra.xmult - card.ability.extra.xmult_step
+                            return {
+                                xmult = card.ability.extra.xmult,
+                                card = card
+                            }
+                        else
+                            return {
+                                xmult = card.ability.extra.xmult-0.1,
+                                card = card
+                            }
+                        end
+                    elseif not card.ability.extra.clicked and not context.blueprint then
                         card.ability.extra.clicked = true
                         return {
                             message = "Click...",
