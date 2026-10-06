@@ -1,9 +1,6 @@
-SampleJimbos = {}
-
 assert(SMODS.load_file("globals.lua"))()
 
--- Jokers
-local joker_src = NFS.getDirectoryItems(SMODS.current_mod.path .. "jokers")
-for _, file in ipairs(joker_src) do
-    assert(SMODS.load_file("jokers/" .. file))()
+local content_src = NFS.getDirectoryItems(SMODS.current_mod.path .. "content")
+for _, file in ipairs(content_src) do
+    assert(SMODS.load_file("content/" .. file))()
 end
