@@ -210,7 +210,7 @@ SMODS.Joker{
 
     calculate = function(self, card, context)
         if context.selling_card and not context.blueprint then
-            if not context.card == card then
+            if context.card ~= card then
                 card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_step
                 return {
                     message = localize('k_upgrade_ex')
