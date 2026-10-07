@@ -61,6 +61,8 @@ SMODS.Enhancement {
             if context.discard and context.other_card == card then
                 johnnyspack_bomb_tick_increment(card)
                 if card.ability.extra.destroy then
+                    card.ability.extra.destroy = false
+                    card.ability.extra.tick = 0
                     return {
                         remove = true
                     }
