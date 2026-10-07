@@ -87,7 +87,7 @@ return {
             johnnyspack_white_seal = {
                 name = "White Seal",
                 text = {
-                    "Creates {C:attention}#1#{} copy",
+                    "Creates a {C:attention}copy",
                     "of this card",
                     "when {C:attention}destroyed{}"
                 },
@@ -96,7 +96,7 @@ return {
 
         Spectral = {
             c_johnnyspack_impurity = {
-                name = "Impurity",
+                name = "Purity",
                 text = {
                     "Add a {C:dark_edition}White Seal",
                     "to {C:attention}#1#{} selected",
@@ -149,10 +149,15 @@ return {
             j_johnnyspack_airplane_spotter = {
                 name = "Spotter",
                 text = {
-                    "On select blind, add a {C:attention}random",
-                    "{C:attention}Bomb Card{} to your hand and",
-                    "set money to {C:money}$0{} if a",
-                    "Bomb Card is {C:attention}destroyed{}"
+                    "On select blind,",
+                    "turn a {C:attention}random card{}",
+                    "held in hand",
+                    "into a {C:attention}Bomb Card{}", 
+                    --[[
+                    "and set",
+                    "money to {C:money}$0{} if a",
+                    "Bomb Card is {C:attention}destroyed{}",
+                    ]]--
                 }
             },
 
@@ -342,7 +347,7 @@ return {
             j_johnnyspack_ketchup = {
                 name = "Ketchup Packet",
                 text = {
-                    "Turns all {C:attention}played{} cards",
+                    "Turns all {C:attention}scored{} cards",
                     "in next hand into {C:attention}Mult Cards{}",
                     "and becomes debuffed"
                 }
@@ -387,7 +392,7 @@ return {
             j_johnnyspack_defuse_kit = {
                 name = "Defuse Kit",
                 text = {
-                    "Played or discarded",
+                    "Scored or discarded",
                     "{C:attention}Bomb Cards{} turn",
                     "into {C:attention}Gold Cards{}"
                 }

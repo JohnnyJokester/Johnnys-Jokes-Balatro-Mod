@@ -9,7 +9,7 @@ function johnnyspack_bomb_tick_increment(card)
     end
 end
 function johnnyspack_bomb_shake_check(card)
-    if card.ability.extra.shake == 1 and not card.ability.extra.destroy then
+    if card.ability.extra.shake == 1 or card.ability.extra.destroy then
         local eval = function(card) return card.ability.extra.tick == card.ability.extra.tick_max-1 and not G.RESET_JIGGLES end
         juice_card_until(card, eval, true)
     end
@@ -45,8 +45,12 @@ SMODS.Enhancement {
                     colour = G.C.RED
                 }
             end
-            if context.hand_drawn then
-                johnnyspack_bomb_shake_check(card)
+            if context.hand_drawn or context.other_drawn then
+                for i = 0, #context.hand_drawn do
+                    if context.hand_drawn[i] == card then
+                        johnnyspack_bomb_shake_check(card)
+                    end
+                end
             end
             if context.before then
                 if context.cardarea == G.play then
@@ -87,7 +91,7 @@ SMODS.Enhancement {
     end
 }
 
---[[
+
 -- Impure Seal
 SMODS.Atlas {
     key = "johnnyspack_white_seal",
@@ -101,7 +105,7 @@ SMODS.Seal {
     config = { extra = { copies = 1 } },
     badge_colour = G.C.WHITE,
     discovered = true,
-    text_colour = HEX('4f6367'),
+    badge_colour = HEX('4f6367'),
 
     calculate = function(self, card, context)
         if context.remove_playing_cards and context.cardarea ~= G.play then
@@ -160,4 +164,3 @@ SMODS.Seal {
         return { vars = { self.config.extra.copies } }
     end
 }
-]]--

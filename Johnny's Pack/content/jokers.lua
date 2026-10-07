@@ -673,7 +673,7 @@ SMODS.Joker{
     calculate = function(self, card, context)
         if card.ability.set == "Joker" and not card.debuff and not context.blueprint then
             if context.discard then
-                if SMODS.has_enhancement(context.other_card, "m_johnnyspack_bomb_enhancement") == true then
+                if SMODS.has_enhancement(context.other_card, "m_johnnyspack_bomb_enhancement") == true and not context.other_card.debuff then
                     --if context.other_card.ability.extra.destroy then 
                         card.ability.extra.defuse = true
                         local percent = 0.85 
@@ -682,7 +682,7 @@ SMODS.Joker{
                         G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.other_card:flip();play_sound('tarot2', percent, 0.6);context.other_card:juice_up(0.3, 0.3);return true end }))
                     --end
                 end
-                if context.other_card == context.full_hand[#context.full_hand] then
+                if context.other_card == context.full_hand[#context.full_hand] and context.defuse then
                     card.ability.extra.defuse = false
                     return {
                         message = "Defused!"
@@ -690,14 +690,14 @@ SMODS.Joker{
                 end
             end
             if context.joker_main and context.cardarea == G.jokers then
-                for i = 1, #context.full_hand do
-                    if SMODS.has_enhancement(context.full_hand[i], "m_johnnyspack_bomb_enhancement") == true then
+                for i = 1, #context.scoring_hand do
+                    if SMODS.has_enhancement(context.scoring_hand[i], "m_johnnyspack_bomb_enhancement") == true and not context.scoring_hand[i].debuff then
                         --if context.full_hand[i].ability.extra.destroy then
                             card.ability.extra.defuse = true
                             local percent = 0.85 
-                            G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.full_hand[i]:flip();play_sound('tarot2', percent, 0.6);context.full_hand[i]:juice_up(0.3, 0.3);return true end }))
-                            context.full_hand[i]:set_ability(G.P_CENTERS.m_gold, nil, true)
-                            G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.full_hand[i]:flip();play_sound('tarot2', percent, 0.6);context.full_hand[i]:juice_up(0.3, 0.3);return true end }))
+                            G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[i]:flip();play_sound('tarot2', percent, 0.6);context.scoring_hand[i]:juice_up(0.3, 0.3);return true end }))
+                            context.scoring_hand[i]:set_ability(G.P_CENTERS.m_gold, nil, true)
+                            G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[i]:flip();play_sound('tarot2', percent, 0.6);context.scoring_hand[i]:juice_up(0.3, 0.3);return true end }))
                         --end
                     end
                 end
@@ -765,7 +765,7 @@ SMODS.Joker{
     config = { extra = {rep = 1, suit = ''} },
     pos = { x = 0, y = 0 },
     rarity = 1,
-    cost = 4,
+    cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
     unlocked=true,
@@ -1578,7 +1578,7 @@ SMODS.Joker{
     config = { extra = { bombs = 1, reset = false } },
     pos = { x = 0, y = 0 },
     rarity = 1,
-    cost = 4,
+    cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
     unlocked=true,
@@ -1595,22 +1595,41 @@ SMODS.Joker{
     calculate = function(self, card, context)
         if card.ability.set == "Joker" and not card.debuff then
             if context.first_hand_drawn then
-                for i = 1, card.ability.extra.bombs do
-                    G.E_MANAGER:add_event(Event({
-                        func = function() 
-                            local _card = create_playing_card({
-                            front = pseudorandom_element(G.P_CARDS, pseudoseed('13_of_stars')), 
-                            center = pseudorandom_element({}, pseudoseed('13_of_stars'))}, G.hand, nil, nil, {G.C.SECONDARY_SET.Enhanced})
-                            _card:set_ability("m_johnnyspack_bomb_enhancement")
-                            G.GAME.blind:debuff_card(_card)
+                local target_cards = {}
+                local temp_hand = {}
+
+                for _, playing_card in ipairs(G.hand.cards) do temp_hand[#temp_hand + 1] = playing_card end
+                table.sort(temp_hand,
+                    function(a, b)
+                        return not a.playing_card or not b.playing_card or a.playing_card < b.playing_card
+                    end
+                )
+
+                pseudoshuffle(temp_hand, 'johnnyspack_spotter')
+
+                for i = 1, card.ability.extra.bombs do target_cards[#target_cards + 1] = temp_hand[i] end
+                
+                G.E_MANAGER:add_event(Event({
+                    func = function ()
+                        for i = 1, #target_cards do
+                            target_cards[i]:set_ability("m_johnnyspack_bomb_enhancement", nil, true)
+                            G.GAME.blind:debuff_card(target_cards[i])
                             G.hand:sort()
-                            if context.blueprint_card then context.blueprint_card:juice_up() else card:juice_up() end
-                            return true
-                        end}))
-                end
-                playing_card_joker_effects({true})
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    target_cards[i]:juice_up()
+                                    return true
+                                end
+                            }))
+                        end
+                        play_sound('timpani')
+                        save_run()
+                        return true
+                    end
+                }))
             end
 
+            --[[
             if context.remove_playing_cards and not context.blueprint then
                 for k, v in pairs(context.removed) do
                     if SMODS.has_enhancement(v, "m_johnnyspack_bomb_enhancement") then
@@ -1629,6 +1648,7 @@ SMODS.Joker{
                     end
                 end
             end
+            ]]--
         end
     end,
 }
