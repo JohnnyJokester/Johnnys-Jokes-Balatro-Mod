@@ -397,8 +397,8 @@ SMODS.Joker{
     key = "johnnyspack_bullet_kin",
     config = { extra = {odds = 6, dollars = 1, cards = 0} },
     pos = { x = 0, y = 0 },
-    rarity = 2,
-    cost = 7,
+    rarity = 3,
+    cost = 8,
     blueprint_compat=true,
     eternal_compat=true,
     unlocked=true,
@@ -419,7 +419,7 @@ SMODS.Joker{
                     card.ability.extra.odds = 6
                 else
                     local funny = pseudorandom("bullet_kin")
-                    if funny < 0.05 then
+                    if funny < 0.2 then
                         card.ability.extra.odds = 5
                     end
                 end
