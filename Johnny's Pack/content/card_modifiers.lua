@@ -102,6 +102,7 @@ SMODS.Enhancement {
 
 
 -- Impure Seal
+--[[
 SMODS.Atlas {
     key = "johnnyspack_white_seal",
     path = "johnnyspack_white_seal.png", 
@@ -173,3 +174,4 @@ SMODS.Seal {
         return { vars = { self.config.extra.copies } }
     end
 }
+    ]]--

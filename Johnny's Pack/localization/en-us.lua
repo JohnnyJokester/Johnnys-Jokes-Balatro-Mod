@@ -116,14 +116,6 @@ return {
                     "{C:attention}#2#{C:inactive} [#3#]{} times"
                 }
             },
-
-            m_johnnyspack_spectre_enhancement = {
-                name = 'Spectre Card',
-                text = {
-                    "{C:green}#2# in #3#{} chance",
-                    "to {C:attention}retrigger{}"
-                }
-            }
         },
 
         Tag = {
@@ -137,6 +129,16 @@ return {
         },
 
         Joker = {
+            j_johnnyspack_wordsearch = {
+                name = "Wordsearch",
+                text = {
+                    "Gains {C:chips}+#1#{} Chips for",
+                    "each {C:attention}letter{} card",
+                    "in played hand",
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
+                }
+            },
+
             j_johnnyspack_gerrymander = {
                 name = "Gerrymander",
                 text = {
@@ -421,16 +423,6 @@ return {
                 }
             },
 
-
-            j_johnnyspack_stelmo = {
-                name = "St. Elmo's Fire",
-                text = {
-                    "{C:attention}Destroys{} every {C:attention}13th{}",
-                    "{C:attention}discarded{} card",
-                    "{C:inactive}(#2# remaining{})"
-                }
-            },
-
             j_johnnyspack_neco_arc = {
                 name = "Neco Arc",
                 text = {
@@ -439,18 +431,6 @@ return {
                     "{C:attention}played{} poker hand and your",
                     "{C:attention}highest{} level poker hand"
                     
-                }
-            },
-
-            j_johnnyspack_conclave = {
-                name = "The Tearoom",
-                text = {
-                    "{C:attention}#1#s{} give {X:mult,C:white}X#5#{} Mult when scored",
-                    "{C:attention}#2#s{} give {C:red}+#6#{} Mult when scored",
-                    "{C:attention}#3#s{} give {C:chips}+#7#{} Chips when scored",
-                    "{C:attention}#4#s{} give {C:money}$#8#{} when scored",
-                    "{s:0.8}Effects are shuffled between",
-                    "{s:0.8}ranks every round"
                 }
             },
 
@@ -465,17 +445,6 @@ return {
                 }
             },
 
-            j_johnnyspack_magehound = {
-                name = "Mage Hound",
-                text = {
-                    "{C:green}#1# in #2#{} chance to",
-                    "create the {C:planet}Planet{}",
-                    "card for final played",
-                    "{C:attention}poker hand{} of round",
-                    "{C:inactive}(Must have room)",
-                }
-            },
-
             j_johnnyspack_fanny = {
                 name = "Chiyo",
                 text = {
@@ -483,15 +452,6 @@ return {
                     "{C:attention}decrease{} the rank",
                     "of discarded cards",
                     "{s:0.8}Does not affect 2s"
-                }
-            },
-
-            j_johnnyspack_that_man = {
-                name = "That Man",
-                text = {
-                    "Gives {C:attention}certain consumables",
-                    "depending on the {C:attention}last played",
-                    "hand of the round"
                 }
             },
 
@@ -540,25 +500,6 @@ return {
                     "count as the same suit,",
                     "{C:spades}Spades{} and {C:diamonds}Diamonds",
                     "count as the same suit",
-                }
-            },
-
-            j_johnnyspack_wordsearch = {
-                name = "Wordsearch",
-                text = {
-                    "Gains {C:chips}+#1#{} Chips for",
-                    "each {C:attention}letter{} card",
-                    "in played hand",
-                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
-                }
-            },
-
-            j_johnnyspack_dr_faust = {
-                name = "Dr. Faust",
-                text = {
-                    "Creates a random",
-                    "{C:dark_edition} Negative{} {C:attention}consumable{} ",
-                    "at the {C:attention}end{} of the {C:attention}round{}"
                 }
             },
 
@@ -616,15 +557,6 @@ return {
                     "When {C:attention}Blind{} is selected,",
                     "create a random",
                     "{C:dark_edition}Negative{C:attention} Rental{} Joker"
-                }
-            },
-
-            j_johnnyspack_goldlewis = {
-                name = "Goldlewis",
-                text = {
-                    "Gives {X:mult,C:white}X#1#{} Mult for",
-                    "every {C:money}$#2#{} you have",
-                    "{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)"
                 }
             },
         }   

@@ -19,7 +19,7 @@ SMODS.Consumable {
     end,
 }
 
-
+--[[
 -- Impurity
 SMODS.Atlas { 
     key = "johnnyspack_impurity", 
@@ -70,3 +70,4 @@ SMODS.Consumable {
         return G.hand and #G.hand.highlighted <= card.ability.extra.max_highlighted and #G.hand.highlighted > 0
     end
 }
+    ]]--
