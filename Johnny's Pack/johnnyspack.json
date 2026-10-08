@@ -3,13 +3,13 @@
   "name": "Johnny's Jokes BETA",
   "display_name": "Johnny's",
   "author": ["Johnny"],
-  "description": "A pack with Jokers and a new Bomb enhancement (and corresponding Tarot). Thank you for playing.",
+  "description": "Thank you for playing.",
   "prefix": "johnnyspack",
   "prefixcomment":"ABOVE PREFIX IS ADDED TO E.G. LOCALIZATION!",
   "main_file": "johnnyspack.lua",
   "priority": 0,
   "badge_colour": "4f6367",
   "badge_text_colour": "ffffff",
-  "version": "0.0.1",
+  "version": "1.0.1b",
   "dependencies": ["Steamodded (>=1.0.0~BETA-0614a)"]
 }

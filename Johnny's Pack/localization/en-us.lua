@@ -422,9 +422,11 @@ return {
             j_johnnyspack_neco_arc = {
                 name = "Neco Arc",
                 text = {
-                    "{X:mult,C:white}X#1#{} for each {C:attention}level lower",
-                    "the {C:attention}played hand{} is compared",
-                    "to the {C:attention}highest level hand"
+                    "This Joker gives {X:mult,C:white}X#1#{} Mult",
+                    "for each {C:attention}level{} between the",
+                    "{C:attention}played{} poker hand and your",
+                    "{C:attention}highest{} level poker hand"
+                    
                 }
             },
 

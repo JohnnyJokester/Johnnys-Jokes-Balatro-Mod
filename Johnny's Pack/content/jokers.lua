@@ -1,4 +1,3 @@
--- you can have shared helper functions
 function shakecard(self) --visually shake a card
     G.E_MANAGER:add_event(Event({
         func = function()
@@ -1230,6 +1229,48 @@ SMODS.Joker{
 -- Nagoriyuki
 
 -- Neco Arc
+SMODS.Atlas{
+    key = "johnnyspack_neco_arc",
+    path = "johnnyspack_neco_arc.png",
+    px = 71,
+    py = 95
+}
+SMODS.Joker{
+    key = "johnnyspack_neco_arc",
+    config = { extra = { x_mult_mod = 0.25} },
+    pos = { x = 0, y = 0 },
+    rarity = 2,
+    cost = 7,
+    blueprint_compat=true,
+    eternal_compat=true,
+    unlocked=true,
+    discovered=true,
+    effect=nil,
+    soul_pos=nil,
+    atlas = "johnnyspack_neco_arc",
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.x_mult_mod } }
+    end,
+
+    calculate = function(self, card, context)
+        if card.ability.set == "Joker" and not card.debuff then
+            if context.joker_main and context.cardarea == G.jokers then
+                local _highest_level = 1
+                for k, v in pairs(G.GAME.hands) do
+                    if G.GAME.hands[k].level > _highest_level then 
+                        _highest_level = G.GAME.hands[k].level
+                    end
+                end
+                if _highest_level - G.GAME.hands[context.scoring_name].level > 0 then
+                    return {
+                        x_mult = 1 + card.ability.extra.x_mult_mod * (_highest_level - G.GAME.hands[context.scoring_name].level)
+                    }
+                end
+            end
+        end
+    end,
+}
 
 -- Nero
 
