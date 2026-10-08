@@ -45,9 +45,16 @@ SMODS.Enhancement {
                     colour = G.C.RED
                 }
             end
-            if context.hand_drawn or context.other_drawn then
+            if context.hand_drawn then
                 for i = 0, #context.hand_drawn do
                     if context.hand_drawn[i] == card then
+                        johnnyspack_bomb_shake_check(card)
+                    end
+                end
+            end
+            if context.other_drawn then
+                for i = 0, #context.other_drawn do
+                    if context.other_drawn[i] == card then
                         johnnyspack_bomb_shake_check(card)
                     end
                 end
