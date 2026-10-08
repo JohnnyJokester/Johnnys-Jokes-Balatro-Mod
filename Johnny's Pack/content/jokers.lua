@@ -157,7 +157,7 @@ SMODS.Joker{
         if card.ability.set == "Joker" and not card.debuff then
             if context.using_consumeable then
                 if context.consumeable.ability.set == 'Planet' and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-                    if pseudorandom('pioneer'..G.GAME.round_resets.ante) < G.GAME.probabilities.normal/card.ability.extra.odds then
+                    --if pseudorandom('pioneer'..G.GAME.round_resets.ante) < G.GAME.probabilities.normal/card.ability.extra.odds then
                         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
                         G.E_MANAGER:add_event(Event({
                             trigger = 'before',
@@ -170,7 +170,7 @@ SMODS.Joker{
                                 return true
                             end)}))
                         card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_plus_tarot'), colour = G.C.PURPLE})
-                    end
+                    --end
                 end
             end
         end
@@ -396,8 +396,8 @@ SMODS.Joker{
     key = "johnnyspack_bullet_kin",
     config = { extra = {odds = 6, dollars = 1, cards = 0} },
     pos = { x = 0, y = 0 },
-    rarity = 3,
-    cost = 8,
+    rarity = 2,
+    cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
     unlocked=true,
@@ -418,7 +418,7 @@ SMODS.Joker{
                     card.ability.extra.odds = 6
                 else
                     local funny = pseudorandom("bullet_kin")
-                    if funny < 0.2 then
+                    if funny < 0.1 then
                         card.ability.extra.odds = 5
                     end
                 end
@@ -849,6 +849,127 @@ SMODS.Joker{
     end,
 }
 
+-- Gerrymander
+SMODS.Atlas{
+    key = "johnnyspack_gerrymander",
+    path = "johnnyspack_gerrymander.png",
+    px = 71,
+    py = 95
+}
+SMODS.Joker{
+    key = "johnnyspack_gerrymander",
+    config = { extra = {} },
+    pos = { x = 0, y = 0 },
+    rarity = 2,
+    cost = 5,
+    blueprint_compat=false,
+    eternal_compat=false,
+    unlocked=true,
+    discovered=true,
+    effect=nil,
+    soul_pos=nil,
+    atlas = "johnnyspack_gerrymander",
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
+
+    calculate = function(self, card, context)
+        if card.ability.set == "Joker" and not card.debuff and not context.blueprint then
+            if context.after then
+                if next(context.poker_hands['Full House']) then
+                    local first_ranks = {}
+                    local second_ranks = {}
+                    local temp_rank = -1
+
+                    for i = 1, #context.scoring_hand do
+                        if temp_rank == -1 then
+                            first_ranks[#first_ranks + 1] = context.scoring_hand[i]
+                            temp_rank = context.scoring_hand[i]:get_id()
+                        else
+                            if context.scoring_hand[i]:get_id() == temp_rank then
+                                first_ranks[#first_ranks + 1] = context.scoring_hand[i]
+                            else
+                                second_ranks[#second_ranks + 1] = context.scoring_hand[i]
+                            end
+                        end
+                    end
+
+                    if #first_ranks > #second_ranks then
+                        pseudoshuffle(first_ranks, 'johnnyspack_gerrymander')
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            delay = 0.15,
+                            func = function()
+                                first_ranks[1]:flip()
+                                play_sound('card1', percent)
+                                first_ranks[1]:juice_up(0.3, 0.3)
+                                return true
+                            end
+                        }))
+                        delay(0.2)
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            delay = 0.1,
+                            func = function()
+                                assert(SMODS.modify_rank(first_ranks[1], second_ranks[1]:get_id() - first_ranks[1]:get_id(), false))
+                                return true
+                            end
+                        }))
+                         G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            delay = 0.15,
+                            func = function()
+                                first_ranks[1]:flip()
+                                play_sound('tarot2', percent, 0.6)
+                                first_ranks[1]:juice_up(0.3, 0.3)
+                                return true
+                            end
+                        }))
+                        return {
+                            message = "Skewed!"
+                        }
+                    elseif #second_ranks > #first_ranks then
+                        pseudoshuffle(second_ranks, 'johnnyspack_gerrymander')
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            delay = 0.15,
+                            func = function()
+                                second_ranks[1]:flip()
+                                play_sound('card1', percent)
+                                second_ranks[1]:juice_up(0.3, 0.3)
+                                return true
+                            end
+                        }))
+                        delay(0.2)
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            delay = 0.1,
+                            func = function()
+                                assert(SMODS.modify_rank(second_ranks[1], first_ranks[1]:get_id() - second_ranks[1]:get_id(), false))
+                                return true
+                            end
+                        }))
+                         G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            delay = 0.15,
+                            func = function()
+                                second_ranks[1]:flip()
+                                play_sound('tarot2', percent, 0.6)
+                                second_ranks[1]:juice_up(0.3, 0.3)
+                                return true
+                            end
+                        }))
+                        return {
+                            message = "Skewed!"
+                        }
+                    end
+                end
+            end
+        end
+    end,
+}
+
 -- Golden Apple
 SMODS.Atlas{
     key = "johnnyspack_golden_apple",
@@ -966,7 +1087,7 @@ SMODS.Atlas{
 }
 SMODS.Joker {
     key = "johnnyspack_johnnys_joker",
-    config = { extra = {counter_max = 4, counter_remaining = 4} },
+    config = { extra = {counter_max = 3, counter_remaining = 3} },
     pos = { x = 0, y = 0 },
     rarity = 2,
     cost = 6,

@@ -96,7 +96,7 @@ return {
 
         Spectral = {
             c_johnnyspack_impurity = {
-                name = "Purity",
+                name = "Impurity",
                 text = {
                     "Add a {C:dark_edition}White Seal",
                     "to {C:attention}#1#{} selected",
@@ -137,6 +137,18 @@ return {
         },
 
         Joker = {
+            j_johnnyspack_gerrymander = {
+                name = "Gerrymander",
+                text = {
+                    "If played hand contains",
+                    "a {C:attention}Full House{},",
+                    "change a random card",
+                    "from the {C:attention}majority{} rank",
+                    "into the {C:attention}minority{} rank",
+                    "at the end of the hand"
+                }
+            },
+
             j_johnnyspack_timecard = {
                 name = "Timecard",
                 text = {
@@ -237,9 +249,9 @@ return {
             j_johnnyspack_pioneer_plaque = {
                 name = "Arecibo Joker",
                 text = {
-                    "{C:green}#1# in #2#{} chance to create",
-                    "a {C:tarot}Tarot{} card when any",
-                    "{C:planet}Planet{} card is used",
+                    --"{C:green}#1# in #2#{} chance to create",
+                    "Creates a {C:tarot}Tarot{} card when",
+                    "any {C:planet}Planet{} card is used",
                     "{C:inactive}(Must have room)",
                 }
             },
